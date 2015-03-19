@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Ajouter un stage</title>
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+		<script language="javascript" type="text/javascript" href="js/bootstrap.min.js"></script>
+		<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+		<script language="javascript" type="text/javascript" src="js/jquery.cookie.js"></script>
+		<script language="javascript" type="text/javascript" src="js/request.js"></script>
+		<script language="javascript" type="text/javascript" src="js/sha1.js"></script>
+		<script language="javascript" type="text/javascript" src="js/string.js"></script>
+
+		<script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
+		<script type="text/javascript">
+			tinymce.init({
+			    selector: "textarea"
+			});
+		</script>
+	</head>
+	
+	<body>
+		<div id="header"></div>
+
+		<div id="content">
+			<div id="content-title" class="page-header"><h1>Ajouter un stage</h1></div>
+			<p>
+				
+			</p>
+
+			<div id="addstage-form" class="form">
+				<input type="text" name="name" id="name" class="form-control" placeholder="Titre du stage" required autofocus />
+				<textarea name="description" id="description" rows="10" cols="50" placeholder="Description du stage" required></textarea>
+				<input type="number" name="placenumber" id="placenumber" class="form-control" placeholder="Nombre de places" required />
+					   
+				<button type="button" id="submitbutton" class="btn btn-primary" style="float: right;">Confirmer</button>
+				<button type="button" id="cancelbutton" class="btn btn-second" style="float: right;">Annuler</button>
+			</form>
+		</div>
+
+		<!--wrapper-->
+			<script language="javascript" type="text/javascript">
+				$('#header').load('inc/header.html');
+			</script>
+		<!--/wrapper-->
+
+		<!--handler-->
+			<script language="javascript" type="text/javascript">
+				$(document).ready(function () {
+				   $("#submitbutton").click(function(){
+				   		console.log(tinymce.get('description').getContent());
+						var name = $('#name').val();
+						var description = tinymce.get('description').getContent();
+						var placenumber = $('#placenumber').val();
+
+						if(request.addStage(name, description, placenumber).status) {
+							$(location).attr('href', 'home.html');
+						}
+	   				});
+
+				   $("#cancelbutton").click(function(){
+						$(location).attr('href', 'home.html');
+	   				});
+				});
+			</script>
+		<!--/handler-->
+	</body>
+</html>

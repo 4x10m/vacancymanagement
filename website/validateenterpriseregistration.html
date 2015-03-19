@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gestion des stages</title>
+
+		<link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+
+		<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+		<script language="javascript" type="text/javascript" src="js/jquery.cookie.js"></script>
+		<script language="javascript" type="text/javascript" src="js/string.js"></script>
+		<script language="javascript" type="text/javascript" src="js/request.js"></script>
+
+		<script language="javascript">
+			function GetURLParameter(sParam) {
+			    var sPageURL = window.location.search.substring(1);
+			    var sURLVariables = sPageURL.split('&');
+
+			    for (var i = 0; i < sURLVariables.length; i++) 
+			    {
+			        var sParameterName = sURLVariables[i].split('=');
+			        if (sParameterName[0] == sParam) 
+			        {
+			            return sParameterName[1];
+			        }
+			    }
+			}
+
+			$(document).ready(function () {
+				var id = GetURLParameter('id');
+				var code = GetURLParameter('code');
+
+				var answer = request.validateEnterpriseRegistration(id, code);
+
+				console.log("validate enterprise registration", "id:" + id, "code:" + code, "answer:" + answer);
+
+				if(answer.status) {
+					document.getElementById("content-wrapper").innerHTML = "Inscription validée. <a href=\"index.html\">Connectez-vous</a>";
+				}
+				else {
+					document.getElementById("content-wrapper").innerHTML = "Erreur, réessayez";
+				}
+			});
+		</script>
+	</head>
+	
+	<body>
+		<div id="header">
+			<div id="head-row">
+				<div id="banner">
+					<img id="banner-img" src="img/logo.jpg"/>
+				</div>
+
+				<div id="nav">
+					<div class="nav-link" id="home">Acceuil</div>
+					<div class="nav-link" id="connect">Connexion</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="content">
+			<div id="content-row">
+				<div id="content-wrapper"></div>
+			</div>
+		</div>
+	</body>
+</html>

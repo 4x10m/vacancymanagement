@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gestion des stages</title>
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+		<script language="javascript" type="text/javascript" href="js/bootstrap.min.js"></script>
+		<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+		<script language="javascript" type="text/javascript" src="js/jquery.cookie.js"></script>
+		<script language="javascript" type="text/javascript" src="js/request.js"></script>
+		<script language="javascript" type="text/javascript" src="js/sha1.js"></script>
+		<script language="javascript" type="text/javascript" src="js/string.js"></script>
+	</head>
+	
+	<body>
+		<div id="header"></div>
+
+		<!--content-->
+			<div id="content" class="jumbotron">
+				<div class="btn-group" data-toggle="buttons-radio">
+					<button type="button" class="btn btn-primary" id="emailinvitationbutton">Email</button>
+					<button type="button" class="btn btn-primary" id="smsinvitationbutton">SMS</button>
+				</div>
+
+				<div id="tablewrapper">
+					<table class="table-bordered table-striped table-hover table-condensed">
+						<thead>
+							<th>Nom</th>
+							<th id="columnwrapper"></th>
+						</thead>
+
+						<tbody id="bodywrapper">
+							<tr>
+								<td><input class="name"/></td>
+								<td><input class="contact"/></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<button type="button" id="addline" class="btn btn-primary">+</button>
+					<button type="button" id="end" class="btn btn-primary">Terminer</button>
+				</div>
+			</div>
+		<!--/content-->
+
+		<!--wrapper-->
+			<script language="javascript" type="text/javascript">
+				$('#header').load('inc/header.html');
+
+				$('#tablewrapper').css('display', 'none');
+			</script>
+		<!--/wrapper-->
+
+		<!--handler-->
+			<script language="javascript" type="text/javascript">
+				$(document).ready(function() {
+					var checkedtype;
+					var type;
+
+					$('.type').click(function(event) {
+						checkedtype = $("input:checked")[0];
+						type = $(checkedtype).val();
+
+						console.log();
+
+						if(type == "email") {
+							$('#columnwrapper').html('email');
+						}
+
+						if(type == "sms") {
+							$('#columnwrapper').html('sms');
+						}
+
+						$('#tablewrapper').css('display', 'block');
+					});
+
+					$('#addline').click(function(event) {
+						$('<tr/>').html('<td><input class="name"/></td><td><input class="contact"/></td>').appendTo('#bodywrapper');
+					});
+
+					$('#end').click(function(event) {
+						var table = [];
+
+						var names = $('.name');
+						var contacts = $('.contact');
+
+						for(var i = 0; i < names.length; i++) {
+							table[i] = [$(names[i]).val(), $(contacts[i]).val()];
+						}
+
+						request.addStudent(type, table);
+
+						//$(location).attr('href', 'home.html');
+					});
+				});
+
+				//$('#phoneinvitationbutton').click(function() {
+				/*document.getElementById('openstudentsessionwrapper').innerHTML = 'Indiquez les numéro de téléphone:<div id="inputphonenumberscontainer"><input type="text" class="studentphonenumber"/></div><input type="button" id="onemorestudentphoneinput" value="+"/><input type="button" id="savestudentphonenumberbutton" value="Sauvegarder"/>';*/
+
+				$('#onemorestudentphoneinput').click(function() {
+					document.getElementById('inputphonenumberscontainer').innerHTML += '<input type="text" class="studentphonenumber"/>';
+				});
+
+				$('#savestudentphonenumberbutton').click(function() {
+					var studentphonenumberinputs = document.getElementsByClassName('studentphonenumber');
+					var studentphonenumbers = [];
+
+					for(var i in studentphonenumberinputs) {
+						push(studentphonenumbers, studentphonenumberinputs[i]);
+					}
+
+					inviteWithPhoneNumbers(studentphonenumbers);
+
+					document.getElementById('openstudentsessionbutton').style.display = "block";
+					document.getElementById('openstudentsessionwrapper').innerHTML = "";
+				});
+
+				$('#emailinvitationbutton').click(function() {
+					$('#tablewrapper').css('display', 'block');
+					$('#columnwrapper').html('Email');
+				});
+
+				$('#smsinvitationbutton').click(function() {
+					$('#tablewrapper').css('display', 'block');
+					$('#columnwrapper').html('SMS');
+				});
+			</script>
+		<!--/handler-->
+	</body>
+</html>

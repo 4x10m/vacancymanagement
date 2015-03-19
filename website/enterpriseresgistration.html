@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Gestion des stages</title>
+
+	<link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/enterpriseregistration.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+	<script language="javascript" type="text/javascript" href="js/bootstrap.min.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="js/request.js"></script>
+	<script language="javascript" type="text/javascript" src="js/sha1.js"></script>
+</head>
+
+<body>
+	<div id="header"></div>
+
+	<div id="content" role="main">
+		<div id="content-title" class="page-header"><h1>Inscription</h1></div>
+
+		<div class="jumbotron">
+			<div class="container-fluid">
+				<div class="row-fluid">
+					<div style="width: 70%; margin: auto;">
+						<div class="page-header"><h3>Bonjour, nous sommes ravie de vous acceuillir dans ce processus d'inscription qui vous permettra a l'avenir de proposer des stages a l'aide de vos identifiants. Veuillez remplir le formulaire si dessus.</h3></div>
+
+						<div id="registration-form">
+							<div id="message"></div>
+
+							<label for="username">Enterprise name:</label>
+							<input type="text" id="username" />
+
+							<label for="password">Password:</label>
+							<input type="text" id="password" />
+
+							<div><p>Vous n'aurez pas directement accés au système après avoir envoyer ce formulaire, pour la sécurité de nos élèves, nous nous devons de vérifier votre identité et vos intention, c'est pourquoi vous devrais passer plusieurs système de sécurité permettant d'approuver votre identité. Dans un premier temps, un email de validation vous sera envoyé a l'email que vous renseignerez ci dessous. Il sera composé d'un lien et d'un code que vous pourrez utiliser pour valider l'email. Il y a un deuxième système de sécurité qui consiste en une validation manuelle de notre responsable des stages. Pour ce faire, le plus simple serais que l'email utilisé pour la validation du compte soit présente sur le site de votre entreprise (par exemple dans la rubrique contact). Ainsi notre responsable des stages pourra facilement faire le rapprochement entre l'email de validation de votre compte et l'mail sur le site de votre entreprise. <span style="background-color: red">Attention : l'email de validation n'a rien a voir avec l'email de contact, en effet, plus tard, vous pourrez renseigner une email de contact.</span> Merci de votre collaboration.</p></div>
+
+							
+							<label for="password">Mail:</label>
+							<input type="text" id="mail" />
+
+							<label for="password">Website:</label>
+							<input type="text" id="website" />
+
+							<input type="button" id="submit" value="Submit"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script language="javascript" type="text/javascript">
+		$('#header').load('inc/header.html');
+	</script>
+
+	<script language="javascript">
+		$(function() {
+			$("#submit").click(function() {
+				console.log("submit clicked");
+
+				var username = document.getElementById("username").value;
+				var password = SHA1(document.getElementById("password").value);
+				var mail = document.getElementById("mail").value;
+				var website = document.getElementById("website").value;
+
+				var answer = request.registerEnterprise(username, password, mail, website);
+
+				console.log("register enterprise", "username:" + username, "password:" + password, "mail:" + mail, "website:" + website, "answer:" + answer);
+
+				if(answer.status) {
+					document.getElementById("content-row").innerHTML = "Vous êtes a présent enregistré, un email vous a été envoyé a l'adresse que vous avez indiqué : " + mail + ". Merci de suivre les instructions qu'il contient.";
+				}
+			});
+		});
+	</script>
+</body>
+</html>

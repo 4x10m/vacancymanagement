@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Profil</title>
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+		<script language="javascript" type="text/javascript" href="js/bootstrap.min.js"></script>
+		<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+		<script language="javascript" type="text/javascript" src="js/jquery.cookie.js"></script>
+		<script language="javascript" type="text/javascript" src="js/request.js"></script>
+		<script language="javascript" type="text/javascript" src="js/sha1.js"></script>
+		<script language="javascript" type="text/javascript" src="js/string.js"></script>
+	</head>
+	
+	<body>
+		<div id="header"></div>
+
+		<div id="content">
+			<div id="content-title" class="page-header"><h1>Profil</h1></div>
+			<div id="name" class="page-header"><h2></h2></div>
+			<div id="type" class="page-header"><h2></h2></div>
+		</div>
+
+		<!--wrapper-->
+			<script language="javascript" type="text/javascript">
+				$('#header').load('inc/header.html');
+			</script>
+		<!--/wrapper-->
+
+		<!--handler-->
+			<script language="javascript" type="text/javascript">
+				$(document).ready(function () {
+					var profilid = $.cookie('userid');
+
+					var data = request.getProfil(profilid);
+
+					$('#name').html(data.values.values[0]);
+					$('#type').html(data.values.values[1]);
+				});
+			</script>
+		<!--/handler-->
+	</body>
+</html>

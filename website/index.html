@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gestion des stages</title>
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+		<script language="javascript" type="text/javascript" href="js/bootstrap.min.js"></script>
+		<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+		<script language="javascript" type="text/javascript" src="js/jquery.cookie.js"></script>
+		<script language="javascript" type="text/javascript" src="js/request.js"></script>
+		<script language="javascript" type="text/javascript" src="js/sha1.js"></script>
+		<script language="javascript" type="text/javascript" src="js/string.js"></script>
+	</head>
+	
+	<body>
+		<div id="header"></div>
+
+		<div class="container">
+			<form class="form-signin">
+				<h2 class="form-signin-heading">Connexion</h2>
+				<span id="enterpriseregistration" class="label label-default" style="text-align: center;">
+					Vous souhaitez proposer des stages. <button class="btn btn-link" href="enterpriseresgistration.html" role="button">Cliquez ici</button>
+				</span>
+				<label for="inputEmail" class="sr-only">Adresse Email</label>
+				<input type="email" id="inputEmail" class="form-control" placeholder="Adresse Email" required autofocus>
+				<label for="inputPassword" class="sr-only">Mot de passe</label>
+				<input type="password" id="inputPassword" class="form-control" placeholder="Mot de passe" required>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" value="remember-me"> Remember me
+					</label>
+				</div>
+				<button class="btn btn-lg btn-primary btn-block" type="submit"  id="submit">Sign in</button>
+			</form>
+
+		</div> <!-- /container -->
+
+		<!--wrapper-->
+			<script language="javascript" type="text/javascript">
+				$('#header').load('inc/header.html');
+			</script>
+		<!--/wrapper-->
+
+		<!--handler-->
+			<script language="javascript" type="text/javascript">
+				$('#submit').click(function () {
+					var username = $('#inputEmail').val();
+					var password = $('#inputPassword').val();
+
+					if(request.login(username, password).status) {
+						$(location).attr('href','home.html');
+					}
+					else {
+						$('#message').html('Username or password not good, try again.');
+					}
+				});
+			</script>
+		<!--/handler-->
+	</body>
+</html>
