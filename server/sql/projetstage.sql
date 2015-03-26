@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Dim 22 Mars 2015 à 23:17
+-- Généré le: Jeu 26 Mars 2015 à 15:30
 -- Version du serveur: 5.5.41
 -- Version de PHP: 5.4.39-0+deb7u1
 
@@ -27,9 +27,20 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `candidature` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `student` int(11) NOT NULL,
-  `stage` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `stage` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Contenu de la table `candidature`
+--
+
+INSERT INTO `candidature` (`id`, `student`, `stage`) VALUES
+(1, 1, 4),
+(2, 1, 5),
+(3, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -65,6 +76,26 @@ CREATE TABLE IF NOT EXISTS `gcmuser` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `skill`
+--
+
+CREATE TABLE IF NOT EXISTS `skill` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Contenu de la table `skill`
+--
+
+INSERT INTO `skill` (`id`, `name`) VALUES
+(1, 'android'),
+(2, 'linux');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `stage`
 --
 
@@ -83,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `stage` (
   KEY `id_4` (`id`),
   KEY `id_6` (`id`),
   KEY `enterprise` (`enterprise`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Contenu de la table `stage`
@@ -92,7 +123,8 @@ CREATE TABLE IF NOT EXISTS `stage` (
 INSERT INTO `stage` (`id`, `title`, `description`, `enterprise`, `online`, `placenumber`) VALUES
 (4, 'plop', 'plop', 12, 1, 1),
 (5, 'plop1', 'plop1', 12, 1, 0),
-(6, 'yyyyoooooo', '<p>un ssssstttttaaaagggggeeee</p>', 12, 1, 0);
+(6, 'yyyyoooooo', '<p>un ssssstttttaaaagggggeeee</p>', 12, 1, 0),
+(9, 'Deux', '<p>plop</p>', 2, 0, 4);
 
 -- --------------------------------------------------------
 
@@ -117,12 +149,24 @@ CREATE TABLE IF NOT EXISTS `studentsession` (
 
 CREATE TABLE IF NOT EXISTS `user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `username` text NOT NULL,
+  `name` text NOT NULL,
+  `email` text NOT NULL,
   `password` text NOT NULL,
   `type` enum('STUDENT','ENTERPRISE','ADMINISTRATOR') NOT NULL,
+  `graduate` enum('DUTINFORMATIQUE','LICENCEINFORMATIQUE') NOT NULL,
+  `skill` set('C','CSHARP','JAVA','WEB','PYTHON','ANDROID','WINDOWS','LINUX') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Contenu de la table `user`
+--
+
+INSERT INTO `user` (`id`, `name`, `email`, `password`, `type`, `graduate`, `skill`) VALUES
+(1, 'plop1', 'student@ap.me', '204036a1ef6e7360e536300ea78c6aeb4a9333dd', 'STUDENT', 'DUTINFORMATIQUE', 'C,CSHARP,JAVA,WEB,ANDROID,LINUX'),
+(2, 'plop2', 'entreprise@ap.me', 'f0f4a5e74afc446d8258ee75ab6175a41082829d', 'ENTERPRISE', 'DUTINFORMATIQUE', ''),
+(3, 'student2', 'student2@ap.me', 'plop2', 'STUDENT', 'DUTINFORMATIQUE', 'ANDROID,WINDOWS,LINUX');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
