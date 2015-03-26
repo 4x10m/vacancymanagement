@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Profil</title>
+
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+	<script language="javascript" type="text/javascript" href="js/bootstrap.min.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.cookie.js"></script>
+	<script language="javascript" type="text/javascript" src="js/request.js"></script>
+	<script language="javascript" type="text/javascript" src="js/sha1.js"></script>
+	<script language="javascript" type="text/javascript" src="js/string.js"></script>
+</head>
+
+<body>
+	<div id="header"></div>
+
+	<div id="content">
+	</div>
+
+	<!--wrapper-->
+	<script language="javascript" type="text/javascript">
+		$('#header').load('inc/student-header.html');
+	</script>
+	<!--/wrapper-->
+
+	<!--handler-->
+	<script language="javascript" type="text/javascript">
+		var candidatedstages = request.getCandidatedStages();
+		
+		var candidatedstageswrapper = $('<div/>', {
+			id: 'candidatedstageswrapper'
+		}).appendTo(content);
+
+		var candidatedstagesmessage = $('<span/>', {
+			id: 'candidatedstagesmessage'
+		}).appendTo(candidatedstageswrapper);
+
+		var candidatedstagestable = $('<div/>', {
+			id: 'candidatedstagestable'
+		}).appendTo(candidatedstageswrapper);
+
+		if(candidatedstages.status) {
+			var candidatedstagestablecontent = "";
+
+			if(candidatedstages.values != null) {
+				candidatedstagestablecontent += '<div class="page-header"><h2>Stage auquelles vous êtes inscrit</h2></div><div class="row"><div class="jumbotron"><table class="table-bordered table-striped table-hover table-condensed"><thead><th>Nom</th><th>Description</th></thead><tbody>';
+
+				for(var i in candidatedstages.values) {
+					candidatedstagestablecontent += String.format('<tr><td>{0}</td><td>{1}</td></tr>', candidatedstages.values[i].title, candidatedstages.values[i].description);
+				}
+
+				candidatedstagestablecontent += '</tbody></table></div></div>';
+			}
+			else {
+				candidatedstagestablecontent = 'Pas de candidatedstages';
+			}
+		}
+
+		candidatedstagestable.html(candidatedstagestablecontent);
+	</script>
+	<!--/handler-->
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Profil</title>
+
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+	<script language="javascript" type="text/javascript" href="js/bootstrap.min.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.cookie.js"></script>
+	<script language="javascript" type="text/javascript" src="js/request.js"></script>
+	<script language="javascript" type="text/javascript" src="js/sha1.js"></script>
+	<script language="javascript" type="text/javascript" src="js/string.js"></script>
+</head>
+
+<body>
+	<div id="header"></div>
+
+	<div id="content">
+
+	</div>
+
+	<!--wrapper-->
+	<script language="javascript" type="text/javascript">
+		$('#header').load('inc/student-header.html');
+	</script>
+	<!--/wrapper-->
+
+	<!--handler-->
+	<script language="javascript" type="text/javascript">
+		$(document).ready(function() {
+			var content = $('#content');
+
+			var stages = request.getStages();
+
+			var stageswrapper = $('<div/>', {
+				id: 'stageswrapper'
+			}).appendTo(content);
+			var stagesmessage = $('<span/>', {
+				id: 'stagesmessage'
+			}).appendTo(stageswrapper);
+
+			var stagestable = $('<div/>', {
+				id: 'stagestable'
+			}).appendTo(stageswrapper);
+
+			if(stages.status) {
+
+				var stagestablecontent = "";
+
+				if(stages.values != null) {
+					stagestablecontent += '<div class="page-header"><h2>Stage</h2></div><div class="row"><div class="jumbotron"><table class="table-bordered table-striped table-hover table-condensed"><thead><th>Nom</th><th>Description</th><th>Candidature</th></thead><tbody>';
+
+					for(var i in stages.values) {
+						stagestablecontent += String.format('<tr><td>{0}</td><td>{1}</td><td><input type="button" class="candidate" id="{2}" value="Candidater"/></td></tr>', stages.values[i].title, stages.values[i].description, stages.values[i].id);
+					}
+
+					stagestablecontent += '</tbody></table></div></div>';
+					console.log("plop");
+				}
+				else {
+					stagestablecontent = 'Pas de stages';
+				}
+
+				stagestable.html(stagestablecontent);
+			}
+		});
+	</script>
+	<!--/handler-->
+</body>
+</html>

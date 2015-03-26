@@ -24,23 +24,21 @@ abstract class DatabaseEntity {
 	//if id is set, load attributes from database and deserialize them
 	public function __construct() {
 		$args = func_get_args();
-
-		switch (count($args)) {
-			case 0:
-				break;
-
+		$argsnb = func_num_args();
+			
+		switch($argsnb) {
 			case 1:
-				if (is_array($args[0])) {
-					$this->deserialize($args[0]);
-				} else {
-					if (array_keys($args)[0] = 'id') {
-						$this->id = $args[0];
-						$this->load();
-					}
+			if (is_array($args[0])) {
+				if (is_array($args[0][0])) {
+					$this->deserialize($args[0][0]);
 				}
-
-				break;
-
+				else $this->deserialize($args[0]);
+			}
+			else {
+				$this->id = $args[0];
+				$this->load();
+			}
+			break;
 			default:
 				$this->deserialize($args);
 		}
@@ -69,10 +67,14 @@ abstract class DatabaseEntity {
 		$keyset = false;
 
 		if (is_array($data)) {
+			//set id
 			if (array_key_exists("id", $data)) {
 				$this->id = $data["id"];
+
+				unset($data["id"]);
 			}
 
+			//deseralize with key
 			foreach ($data as $key => $value) {
 				if (array_key_exists($key, $this->getValues())) {
 					$this->set($key, $value);
@@ -81,6 +83,7 @@ abstract class DatabaseEntity {
 				}
 			}
 
+			//deserialize if index are number
 			if (!$keyset) {
 				$i = 0;
 				$keys = array_keys($this->getValues());
@@ -90,11 +93,6 @@ abstract class DatabaseEntity {
 					$i++;
 				}
 			}
-			/*} else {
-		for ($i = 0; $i < count($data); $i++) {
-		$this->set(array_keys($this->values)[$i], $data[$i]);
-		}
-		}*/
 		} else {
 			//var_dump($data);
 		}
@@ -106,13 +104,14 @@ abstract class DatabaseEntity {
 
 	//insert or update row in database following if id is set or not
 	public function save() {
-		$result;
+		$result = false;
 
 		if (isset($this->id) and $this->id > 0) {
 			$result = DatabaseController::update($this);
 		} else {
 			$this->id = DatabaseController::insert($this);
-			$result = true;
+			
+			if($this->id > 0) $result = true;
 		}
 
 		return $result;

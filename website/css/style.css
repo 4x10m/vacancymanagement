@@ -63,3 +63,64 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+#criteria {
+  text-align: center;
+  display: table;
+
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#criteria-left {
+  display: table-cell;
+
+  padding-right: 20px;
+}
+
+#criteria-right {
+  display: table-cell;
+
+  padding-left: 20px;
+}
+
+#studenttable {
+  display: inline-block;
+
+}
+
+.skill {
+  margin-right: 2px;
+  margin-left: 2px;
+  
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#studenttable th {
+  text-align: center;
+  border: solid 1px;
+
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+#studenttable td {
+  text-align: center;
+  border: solid 1px;
+  
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.skill {
+  background-color: blue;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.checked {
+  background-color: red;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}

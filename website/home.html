@@ -21,8 +21,6 @@
 
 		<!--wrapper-->
 			<script language="javascript" type="text/javascript">
-				$('#header').load('inc/header.html');
-
 				var connection = request.checkConnection();
 
 				if(connection.status && !connection.values.state) {
@@ -40,85 +38,23 @@
 
 				switch(usertype) {
 					case 'ADMINISTRATOR':
+					$('#header').load('inc/header.html');
 						loadAdministratorPanel();
 						break;
 
 					case 'ENTERPRISE':
+					$('#header').load('inc/header.html');
 						loadEnterprisePanel();
 						break;
 
 					case 'STUDENT':
+						$('#header').load('inc/student-header.html');
 						loadStudentPanel();
 						break;
 				}
 
 				function loadStudentPanel() {
-					var content = $('#content');
-
-					var stages = request.getStages();
-					var candidatedstages = request.getCandidatedStages();
 					
-					var stageswrapper = $('<div/>', {
-						id: 'stageswrapper'
-					}).appendTo(content);
-
-					var stagesmessage = $('<span/>', {
-						id: 'stagesmessage'
-					}).appendTo(stageswrapper);
-
-					var stagestable = $('<div/>', {
-						id: 'stagestable'
-					}).appendTo(stageswrapper);
-
-					if(stages.status) {
-						var stagestablecontent = "";
-
-						if(stages.values != null) {
-							stagestablecontent += '<div class="page-header"><h2>Stage</h2></div><div class="row"><div class="jumbotron"><table class="table-bordered table-striped table-hover table-condensed"><thead><th>Nom</th><th>Description</th><th>Candidature</th></thead><tbody>';
-
-							for(var i in stages.values) {
-								stagestablecontent += String.format('<tr><td>{0}</td><td>{1}</td><td><input type="button" class="candidate" id="{2}" value="Candidater"/></td></tr>', stages.values[i].title, stages.values[i].description, stages.values[i].id);
-							}
-
-							stagestablecontent += '</tbody></table></div></div>';
-						}
-						else {
-							stagestablecontent = 'Pas de stages';
-						}
-					}
-
-					stagestable.html(stagestablecontent);
-
-					var candidatedstageswrapper = $('<div/>', {
-						id: 'candidatedstageswrapper'
-					}).appendTo(content);
-
-					var candidatedstagesmessage = $('<span/>', {
-						id: 'candidatedstagesmessage'
-					}).appendTo(candidatedstageswrapper);
-
-					var candidatedstagestable = $('<div/>', {
-						id: 'candidatedstagestable'
-					}).appendTo(candidatedstageswrapper);
-
-					if(candidatedstages.status) {
-						var candidatedstagestablecontent = "";
-
-						if(candidatedstages.values != null) {
-							candidatedstagestablecontent += '<div class="page-header"><h2>Stage auquelles vous êtes inscrit</h2></div><div class="row"><div class="jumbotron"><table class="table-bordered table-striped table-hover table-condensed"><thead><th>Nom</th><th>Description</th></thead><tbody>';
-
-							for(var i in candidatedstages.values) {
-								candidatedstagestablecontent += String.format('<tr><td>{0}</td><td>{1}</td></tr>', candidatedstages.values[i].title, candidatedstages.values[i].description);
-							}
-
-							candidatedstagestablecontent += '</tbody></table></div></div>';
-						}
-						else {
-							candidatedstagestablecontent = 'Pas de candidatedstages';
-						}
-					}
-
-					candidatedstagestable.html(candidatedstagestablecontent);
 				}
 
 				function loadProfil(username, usertype) {
@@ -154,6 +90,13 @@
 						value: 'Proposer un stage'
 					}).appendTo(menu);
 
+					var searchstudentbutton = $('<input/>', {
+						type: 'button',
+						id: 'searchstudentbutton',
+						class: 'btn btn-primary',
+						value: 'Rechercher un étudiant'
+					}).appendTo(menu);
+
 					loadEnterpriseStage();
 				}
 
@@ -175,35 +118,35 @@
 
 					//load enterprise registration table content
 					//TODO clean this
-					if(stages.status) {
-						var stagestablecontent = '';
+					var stagestablecontent = '';
 
-						if(stages.values != null) {
-							stagestablecontent += '<div class="page-header"><h2>Stage</h2></div><div class="row"><table class="table-bordered table-striped table-hover table-condensed"><thead><th>Nom</th><th>Description</th><th>Nombre de places</th><th>Candidature</th><th>Modification</th></thead><tbody>';
+					if(stages.status && stages.values != null) {
+						stagestablecontent += '<div class="page-header"><h2>Stage</h2></div><div class="row"><table class="table-bordered table-striped table-hover table-condensed"><thead><th>Nom</th><th>Description</th><th>Nombre de places</th><th>Candidature</th><th>Modification</th></thead><tbody>';
 
-							for(var i in stages.values) {
-								var candidaturecontent = '';
-								var candidatures = request.getCandidature(stages.values[i].id);
+						for(var i in stages.values) {
+							var candidaturecontent = 'Pas de candidatures';
+							var candidatures = request.getCandidature(stages.values[i].id);
 
+							if(candidatures.status && candidatures.values != null && candidatures.values.length > 0) {
 								candidaturecontent += '<table class="table-bordered table-striped table-hover table-condensed">';
 
-								for(var j in candidatures.values.values)  {
+								for(var j in candidatures.values)  {
 									candidaturecontent += String.format('<tr><td><button type="button" class="btn btn-link profilbutton" id="{0}">{1}</button</td><td><button type="button" class="btn btn-primary accept-button accept-button" id="{2}">Accepter</button></td><td><button type="button" class="btn btn-warning accept-button refuse-button" id="{2}">Refuser</button></td></tr>', candidatures.values.values[i].id, candidatures.values.values[i].username, candidatures.values.values[i].id);
 								}
 
 								candidaturecontent += '</table>';
-
-								stagestablecontent += String.format('<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td><button typ="button" class="modif-button btn btn-primary" id="{4}">Modifier</button></td></tr>', stages.values[i].title, stages.values[i].description, stages.values[i].nbcandidature, candidaturecontent, stages.values[i].id);
 							}
 
-							stagestablecontent += "</tbody></table></div>";
-						}
-						else {
-							stagestablecontent += "Pas de stages proposés";
+							stagestablecontent += String.format('<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td><button typ="button" class="modif-button btn btn-primary" id="{4}">Modifier</button></td></tr>', stages.values[i].title, stages.values[i].description, stages.values[i].nbcandidature, candidaturecontent, stages.values[i].id);
 						}
 
-						stagestable.html(stagestablecontent);
+						stagestablecontent += "</tbody></table></div>";
 					}
+					else {
+						stagestablecontent += "Pas de stages proposés";
+					}
+
+					stagestable.html(stagestablecontent);
 				}
 
 				function loadEnterpriseRegistration() {
@@ -374,6 +317,11 @@
 					$('#newstagebutton').click(function() {
 						$(location).attr('href', 'addstage.html');
 					});
+
+					$('#searchstudentbutton').click(function() {
+						$(location).attr('href', 'searchstudent.html');
+					});
+
 
 					$('#openstudentsessionbutton').click(function(event) {
 						$(location).attr('href', 'openstudentsession.html');

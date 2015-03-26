@@ -5,15 +5,13 @@ require_once "../model/lib/badserverresponse.php";
 
 $serverresponse = new BadServerResponse();
 
-if (isset($_GET) and !empty($_GET)) {
-	$id = (isset($_GET['id']) and !empty($_GET['id'])) ? $_GET['id'] : null;
+session_start();
 
-	if (isset($id)) {
-		$user = new User($id);
+$user = new User($_SESSION['userid']);
 
-		$serverresponse = new GoodServerResponse(array('state' => true, 'values' => array($user->get("username"), $user->get("type"))));
-	}
-}
+$serverresponse = new GoodServerResponse(array('state' => true, 'values' => array($user->get("name"), $user->get("type"), $user->get("graduate"))));
+
+session_write_close();
 
 echo ($serverresponse->serializeToJSON());
 ?>

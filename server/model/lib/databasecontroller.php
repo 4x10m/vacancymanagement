@@ -6,8 +6,8 @@ require_once 'config.php';
 class DatabaseController {
 	private static $databasehostname = "localhost";
 	private static $databasename = "projetstage";
-	private static $databaseusername = "www-data";
-	private static $databasepassword = "";
+	private static $databaseusername = "root";
+	private static $databasepassword = "toor";
 
 	//instance of pdo
 	private static $database = null;
@@ -164,6 +164,7 @@ class DatabaseController {
 	//databaseentity : class inherited from DatabaseEntity
 	//return array values of data  loaded from database
 	public static function select($databaseentity) {
+		$result = null;
 		//check argument type
 		self::checkType($databaseentity);
 
@@ -172,9 +173,13 @@ class DatabaseController {
 		$tablename = $databaseentity->getTableName();
 		$id = $databaseentity->getId();
 
-		$data = self::$database->query(sprintf($queryformat, $tablename, $id))->fetch();
+		$data = self::$database->query(sprintf($queryformat, $tablename, $id));
 
-		return $data;
+		if($data) {
+			$result = $data->fetch();
+		}
+
+		return $result;
 	}
 
 	//delete an entity from it id
@@ -200,18 +205,16 @@ class DatabaseController {
 		$queryresult = self::$database->query($query);
 
 		if ($queryresult) {
-			$numberofline = $queryresult->rowCount();
-
-			switch ($numberofline) {
+			/*switch ($queryresult->rowCount()) {
 				case 1:
 					$result = $queryresult->fetch();
 					break;
-				default:
+				default:*/
 					$result = $queryresult->fetchAll();
-			}
+			//}
 		}
-
+		
 		return $result;
 	}
-}DatabaseController::init(); //initialize class
+} DatabaseController::init(); //initialize class
 ?>

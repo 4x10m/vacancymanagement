@@ -1,11 +1,13 @@
 <?php
-//header("Access-Control-Allow-Origin: *");
-//header("Access-Control-Allow-Methods: PUT, GET, POST");
-//header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: PUT, GET, POST");
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
 require_once "../model/user.php";
 require_once "../model/lib/goodserverresponse.php";
 require_once "../model/lib/badserverresponse.php";
+
+session_start();
 
 $serverresponse = new BadServerResponse();
 
@@ -17,7 +19,7 @@ if (isset($_GET) and !empty($_GET)) {
 		$user = User::login($username, $password);
 
 		if ($user != null) {
-			session_start();
+			
 			//session_regenerate_id();
 
 			//$sessionid = session_id();

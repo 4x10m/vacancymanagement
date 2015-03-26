@@ -19,7 +19,7 @@ if (isset($_GET) and !empty($_GET)) {
 		if (isset($userid) and !empty($userid)) {
 			$user = new User($userid);
 
-			$serverresponse = new GoodServerResponse($user->get("username"), $user->get("type"));
+			$serverresponse = new GoodServerResponse($user->get("name"), $user->get("type"));
 		}
 	}
 }

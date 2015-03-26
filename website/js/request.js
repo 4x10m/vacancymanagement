@@ -1,5 +1,5 @@
 var request = {
-	serveraddress: "http://localhost/projetstage/server/controller/",
+	serveraddress: "http://localhost/vacancymanagement/server/controller/",
 
 	getURL: function(controller) {
 		return this.serveraddress + controller;
@@ -68,14 +68,18 @@ var request = {
 	},
 
 	getStagesFromEnterprise: function() {
-		return eval('(' + $.ajax({ type: "GET",   
+		var result = eval('(' + $.ajax({ type: "GET",   
 			url: this.getURL("getstagesfromenterprise.php"),
 			async: false
 		}).responseText + ')');
+
+		console.log('request stages from enterprise', 'status: ' + result.status + ' result: ' + result.values);
+
+		return result;
 	},
 
 	getEnterpriseRegistration: function() {
-		return eval('(' + $.ajax({ type: "GET",   
+		return eval('(' + $.ajax({ type: "GET",
 			url: this.getURL("getenterpriseregistration.php"),
 			async: false
 		}).responseText + ')');
@@ -225,19 +229,101 @@ var request = {
 			async: false
 		}).responseText + ')');
 
-		console.log('debug get candidatures', result.status, result.values.state, result.values.values);
+		console.log('debug get candidatures', result.status, result.values);
 
 		return result;
 	},
 
-	getProfil: function(id) {
+	getProfil: function() {
 		var result = eval('(' + $.ajax({ type: "GET",   
 			url: this.getURL("getprofil.php"),
-			data: { id: id },
 			async: false
 		}).responseText + ')');
 
-		console.log('debug get profil', 'arg', id, 'result', result.status, result.values);
+		console.log('debug get profil', 'result', result.status, result.values);
+
+		return result;
+	},
+
+	setSkills: function(skills) {
+		var result = eval('(' + $.ajax({ type: "GET",   
+			url: this.getURL("setskills.php"),
+			data: { skills: skills },
+			async: false
+		}).responseText + ')');
+
+		console.log('debug set skills', ' skills ', skills, ' result ', result.status, result.values);
+
+		return result;
+	},
+
+	getSkills: function() {
+		var result = eval('(' + $.ajax({ type: "GET",   
+			url: this.getURL("getskills.php"),
+			async: false
+		}).responseText + ')');
+
+		console.log('debug get skills', ' result ', result.status, result.values);
+
+		return result;
+	},
+
+	getFormatedSkills: function(userid) {
+		var result = eval('(' + $.ajax({ type: "GET",   
+			url: this.getURL("getformatedskills.php"),
+			data: { userid: userid },
+			async: false
+		}).responseText + ')');
+
+		console.log('debug get formated skills', ' result ', result.status, result.values);
+
+		return result;
+	},
+
+	getFormatedGraduate: function(userid) {
+		var result = eval('(' + $.ajax({ type: "GET",   
+			url: this.getURL("getformatedgraduate.php"),
+			data: { userid: userid },
+			async: false
+		}).responseText + ')');
+
+		console.log('debug get formated graduate', ' result ', result.status, result.values);
+
+		return result;
+	},
+
+	searchStudents: function(graduate, skills) {
+		var result = eval('(' + $.ajax({ type: "GET",   
+			url: this.getURL("searchstudents.php"),
+			data: { graduate: graduate, skills: skills },
+			async: false
+		}).responseText + ')');
+
+		console.log('debug search student', ' graduate ', graduate, ' skills ', skills, ' result ', result.status, result.values);
+
+		return result;
+	},
+
+	searchStudentsWithGraduate: function(graduate) {
+		var result = eval('(' + $.ajax({ type: "GET",   
+			url: this.getURL("searchstudentswithgraduate.php"),
+			data: { graduate: graduate },
+			async: false
+		}).responseText + ')');
+
+		console.log('debug search student with graduate', ' graduate ', graduate, ' result ', result.status, result.values);
+
+		return result;
+	},
+
+	searchStudentsWithSkills: function(skills) {
+		var result = eval('(' + $.ajax({ type: "GET",   
+			url: this.getURL("searchstudentswithskills.php"),
+			data: { skills: skills },
+			async: false
+		}).responseText + ')');
+
+		console.log('debug search student with skills', ' skills ', skills, ' result ', result.status, result.values);
 
 		return result;
 	}

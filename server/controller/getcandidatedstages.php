@@ -9,7 +9,7 @@ session_start();
 
 $stages = Candidature::getCandidatedStage($_SESSION['userid']);
 
-//TODO normally we dont need this if statement
+
 if (is_array($stages[0])) {
 	$serveresponse = new GoodServerResponse($stages);
 } else {

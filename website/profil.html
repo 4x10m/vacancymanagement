@@ -1,46 +1,124 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Profil</title>
+<head>
+	<meta charset="utf-8" />
+	<title>Profil</title>
 
-		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 
-		<script language="javascript" type="text/javascript" href="js/bootstrap.min.js"></script>
-		<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
-		<script language="javascript" type="text/javascript" src="js/jquery.cookie.js"></script>
-		<script language="javascript" type="text/javascript" src="js/request.js"></script>
-		<script language="javascript" type="text/javascript" src="js/sha1.js"></script>
-		<script language="javascript" type="text/javascript" src="js/string.js"></script>
-	</head>
-	
-	<body>
-		<div id="header"></div>
+	<script language="javascript" type="text/javascript" href="js/bootstrap.min.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.cookie.js"></script>
+	<script language="javascript" type="text/javascript" src="js/request.js"></script>
+	<script language="javascript" type="text/javascript" src="js/sha1.js"></script>
+	<script language="javascript" type="text/javascript" src="js/string.js"></script>
+</head>
 
-		<div id="content">
-			<div id="content-title" class="page-header"><h1>Profil</h1></div>
-			<div id="name" class="page-header"><h2></h2></div>
-			<div id="type" class="page-header"><h2></h2></div>
+<body>
+	<div id="header"></div>
+
+	<div id="content">
+		<div id="content-title" class="page-header"><h1>Profil</h1></div>
+		<div id="name" class="page-header"></div>
+		<div id="type" class="page-header"></div>
+		<div id="graduate" class="page-header"></div>
+
+		<div>
+			<div class="page-header">Skillz</div>
+
+			<div>
+				<tr>
+					<td><div class="skill" id="android">Android</div></td>
+					<td><div class="skill" id="linux">Linux</div></td>
+					<td><div class="skill" id="windows">Windows</div></td>
+				</tr>
+
+				<tr>
+					<td><div class="skill" id="csharp">C#</div></td>
+					<td><div class="skill" id="c">C/C++</div></td>
+					<td><div class="skill" id="java">Java</div></td>
+				</tr>
+
+				<tr>
+					<td><div class="skill" id="web">Web</div></td>
+					<td><div class="skill" id="python">Python</div></td>
+					<td></td>
+				</tr>
+			</table>
 		</div>
+	</div>
 
-		<!--wrapper-->
-			<script language="javascript" type="text/javascript">
-				$('#header').load('inc/header.html');
-			</script>
-		<!--/wrapper-->
+	<button class="btn btn-lg btn-primary btn-block" id="save">Sauvegarder</button>
+</div>
 
-		<!--handler-->
-			<script language="javascript" type="text/javascript">
-				$(document).ready(function () {
-					var profilid = $.cookie('userid');
+<!--wrapper-->
+<script language="javascript" type="text/javascript">
+	$('#header').load('inc/student-header.html');
+</script>
+<!--/wrapper-->
 
-					var data = request.getProfil(profilid);
+<!--handler-->
+<script language="javascript" type="text/javascript">
+	$('.skill').click(function() {
+		id = $(this).attr("id");
 
-					$('#name').html(data.values.values[0]);
-					$('#type').html(data.values.values[1]);
-				});
-			</script>
-		<!--/handler-->
-	</body>
+		if($(this).hasClass("checked")) {
+			$(this).removeClass("checked");
+
+			for(var i = $.skills.length - 1; i >= 0; i--) {
+				if($.skills[i] === id) {
+					$.skills.splice(i, 1);
+				}
+			}
+		}
+		else {
+			$(this).addClass("checked");
+
+			$.skills.push(id);
+		}
+	});	
+
+	$(document).ready(function () {
+		var data = request.getProfil();
+		var skills = request.getSkills();
+
+		$('#name').html(data.values.values[0]);
+		$('#type').html(data.values.values[1]);
+
+		console.log('plop1', request.getUserId());
+		$('#graduate').html(request.getFormatedGraduate(request.getUserId().values.id).values[0]);
+
+		for(var i in skills.values) {
+			$('.skill').each(
+				function() {
+					if($(this).attr("id") == skills.values[i].toLowerCase()) {
+						$(this).addClass('checked');
+					}
+				}
+			);
+		}
+	});
+
+	$('#save').click(function() {
+		var skills = [];
+
+		$(".checked").each( 
+			function() { 
+				skills.push($(this).attr("id").toUpperCase());
+			} 
+		);
+
+		if(request.setSkills(skills).status) {
+			$(this).html('Done');
+
+			$(this).attr("disabled", "disabled");
+		}
+		else {
+			$(this).html('Error');
+		}
+	});
+</script>
+<!--/handler-->
+</body>
 </html>

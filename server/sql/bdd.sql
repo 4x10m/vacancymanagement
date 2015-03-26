@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10deb1
+-- version 3.4.11.1deb2+deb7u1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Jan 15, 2015 at 09:12 PM
--- Server version: 5.5.40-0ubuntu0.14.04.1
--- PHP Version: 5.5.9-1ubuntu4.5
+-- Client: localhost
+-- Généré le: Dim 22 Mars 2015 à 23:17
+-- Version du serveur: 5.5.41
+-- Version de PHP: 5.4.39-0+deb7u1
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -17,13 +17,55 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `projetstage`
+-- Base de données: `projetstage`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `stage`
+-- Structure de la table `candidature`
+--
+
+CREATE TABLE IF NOT EXISTS `candidature` (
+  `student` int(11) NOT NULL,
+  `stage` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `enterpriseregistration`
+--
+
+CREATE TABLE IF NOT EXISTS `enterpriseregistration` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` text NOT NULL,
+  `password` text NOT NULL,
+  `mail` text NOT NULL,
+  `website` text NOT NULL,
+  `validationcode` text NOT NULL,
+  `validationlevel` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `gcmuser`
+--
+
+CREATE TABLE IF NOT EXISTS `gcmuser` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL,
+  `registrationid` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `stage`
 --
 
 CREATE TABLE IF NOT EXISTS `stage` (
@@ -44,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `stage` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `stage`
+-- Contenu de la table `stage`
 --
 
 INSERT INTO `stage` (`id`, `title`, `description`, `enterprise`, `online`, `placenumber`) VALUES
@@ -52,15 +94,35 @@ INSERT INTO `stage` (`id`, `title`, `description`, `enterprise`, `online`, `plac
 (5, 'plop1', 'plop1', 12, 1, 0),
 (6, 'yyyyoooooo', '<p>un ssssstttttaaaagggggeeee</p>', 12, 1, 0);
 
---
--- Constraints for dumped tables
---
+-- --------------------------------------------------------
 
 --
--- Constraints for table `stage`
+-- Structure de la table `studentsession`
 --
-ALTER TABLE `stage`
-  ADD CONSTRAINT `stage_owner` FOREIGN KEY (`enterprise`) REFERENCES `user` (`id`);
+
+CREATE TABLE IF NOT EXISTS `studentsession` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` int(11) NOT NULL,
+  `contact` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `validationcode` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user`
+--
+
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` text NOT NULL,
+  `password` text NOT NULL,
+  `type` enum('STUDENT','ENTERPRISE','ADMINISTRATOR') NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

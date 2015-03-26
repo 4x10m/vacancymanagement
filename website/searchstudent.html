@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Profil</title>
+
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+	<script language="javascript" type="text/javascript" href="js/bootstrap.min.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.cookie.js"></script>
+	<script language="javascript" type="text/javascript" src="js/request.js"></script>
+	<script language="javascript" type="text/javascript" src="js/sha1.js"></script>
+	<script language="javascript" type="text/javascript" src="js/string.js"></script>
+</head>
+
+<body>
+	<div id="header"></div>
+
+	<div id="content">
+		<div>
+			<div class="page-header">Rechercher un étudiant</div>
+
+			<div id="criteria">
+				<div id="criteria-left">
+					<select class="form-control" id="graduateselect">
+						<option value="DUTINFORMATIQUE">DUT Informatique</option>
+						<option value="LICENCEINFORMATIQUE">Licence Informatique</option>
+					</select>
+				</div>
+
+				<div id="criteria-right">
+					<table>
+						<tr>
+							<td><div class="skill " id="android">Android</div></td>
+							<td><div class="skill" id="linux">Linux</div></td>
+							<td><div class="skill" id="windows">Windows</div></td>
+						</tr>
+
+						<tr>
+							<td><div class="skill" id="csharp">C#</div></td>
+							<td><div class="skill" id="c">C/C++</div></td>
+							<td><div class="skill" id="java">Java</div></td>
+						</tr>
+
+						<tr>
+							<td><div class="skill" id="web">Web</div></td>
+							<td><div class="skill" id="python">Python</div></td>
+							<td></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div id="studenttable"></div>
+		</div>
+	</div>
+
+	<!--wrapper-->
+	<script language="javascript" type="text/javascript">
+		$('#header').load('inc/header.html');
+	</script>
+	<!--/wrapper-->
+
+	<!--handler-->
+	<script language="javascript" type="text/javascript">
+		$.graduate = undefined;
+		$.skills = [];
+
+		function refresh() {
+			var students = undefined;
+			var check = false;
+
+			if($.skills.length > 0 && $.graduate != undefined) {
+				students = request.searchStudents($.graduate, $.skills);
+			}
+			else {
+				if($.graduate != undefined) {
+					students = request.searchStudentsWithGraduate($.graduate);
+
+					check = true;
+				}
+
+				if($.skills.length > 0) {
+					students = request.searchStudentsWithSkills($.skills);
+
+					check = true;
+				}
+
+				if(!check) {
+					students = request.searchStudents("", []);
+				}
+			}
+
+			if(students != undefined && students.status && students.values != null && students.values[0] != null) {
+				var beginstudentstable = "<table><tr><th>Nom</th><th>Diplôme préparé</th><th>Skills</th><th>Email</th></tr>";
+				var endstudentstable = "</table>";
+				var middlestudentstable = "";
+
+				for(var i in students.values) {
+					var studentid = students.values[i].id;
+
+					var skills = request.getFormatedSkills(studentid);
+					var graduate = request.getFormatedGraduate(studentid).values[0];
+
+					middlestudentstable  += "<tr><td>" + students.values[i].name + "</td><td>";
+
+					middlestudentstable += graduate + "</td><td>";
+
+					for(var j in skills.values) {
+						middlestudentstable += skills.values[j];
+					} 
+
+					middlestudentstable += "</td><td>";
+					middlestudentstable += '<a href="mailto:' + students.values[i].email + '?Subject=Contact Stage" target="_top">' + students.values[i].email + '</a>';
+					middlestudentstable += "</td></tr>";
+				}
+
+				$('#studenttable').html(beginstudentstable + middlestudentstable + endstudentstable);
+			}
+			else $('#studenttable').html("Aucun étudiant ne correspondant a la recherche");
+		}
+
+		$(document).ready(function () {
+			refresh();
+
+			$('.skill').click(function() {
+				id = $(this).attr("id");
+
+				if($(this).hasClass("checked")) {
+					$(this).removeClass("checked");
+
+					for(var i = $.skills.length - 1; i >= 0; i--) {
+						if($.skills[i] === id) {
+							$.skills.splice(i, 1);
+						}
+					}
+				}
+				else {
+					$(this).addClass("checked");
+
+					$.skills.push(id);
+				}
+
+				refresh();
+			});						
+		});
+
+		$('#graduateselect').change(function() {
+			$.graduate = "";
+
+			$.graduate = $(this).val();
+
+			refresh();
+		});
+	</script>
+	<!--/handler-->
+</body>
+</html>

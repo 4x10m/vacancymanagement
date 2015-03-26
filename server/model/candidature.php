@@ -21,8 +21,6 @@ class Candidature extends DatabaseEntity {
 	}
 
 	public static function getCandidatures($id) {
-		$candidaturearray = array();
-
 		$query = "SELECT * FROM candidature inner join stage on candidature.stage = stage.id inner join user on candidature.student = user.id WHERE candidature.stage = %s";
 
 		return parent::query(sprintf($query, $id));
